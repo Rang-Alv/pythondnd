@@ -10,21 +10,19 @@ classes = {
 mobs = {
     "Neville": [4, 4, 2, 4, 4, 4, 4],
     "Creeper (aw man)": [1, 7, 2, 2, 2, 2, 2],
-    "James":  [4, 2, 6, 2, 6, 4, 6],
-    "Ghoul":  [3, 5, 6, 2, 2, 2, 1],
-    "Barry (63)":  [3, 3, 3, 2, 2, 2, 10],
-    "Boris":  [2, 2, 2, 2, 2, 2, 1],
-    "Juan":  [10, 2, 2, 2, 2, 2, 1],
+    "James": [4, 2, 6, 2, 6, 4, 6],
+    "Ghoul": [3, 5, 6, 2, 2, 2, 1],
+    "Barry (63)": [3, 3, 3, 2, 2, 2, 10],
+    "Boris": [2, 2, 2, 2, 2, 2, 1],
+    "Juan": [10, 2, 2, 2, 2, 2, 1],
     "Asoka": [6, 6, 4, 4, 3, 6, 8]}
-
-
-
 
 global position
 position = 1
 
-global player_alive 
+global player_alive
 player_alive = True
+
 
 def chooseClass():
     classname = input("please enter the name of the class you wish to select")
@@ -55,44 +53,38 @@ def selection():
 def menu():
     print("**********DND*********")
     print(classes)
-    print(selection())
+    player = selection()
+    print(player)
+    return player
 
 
 def combat_loop(player_stat_input):  # pass monster info and player info?
 
     player_stats = {
-        "Name": "Player",
-        "HP": 4,
-        "Attack": 4,
-        "Defence": 4,
-        "Special": 4,
-        "Agility": 4,
-        "Intelligence": 4,
-        "Luck": 4,
+        "Name": player_stat_input["Name"],
+        "HP": player_stat_input["HP"],
+        "Attack": player_stat_input["Attack"],
+        "Defence": player_stat_input["Defence"],
+        "Special": player_stat_input["Special"],
+        "Agility": player_stat_input["Agility"],
+        "Intelligence": player_stat_input["Intelligence"],
+        "Luck": player_stat_input["Luck"],
     }
 
-    for stat in player_stat_input:
-        player_stats[stat] = player_stat_input[stat]
-
+    # for stat in player_stat_input:
+    #    player_stats[stat] = player_stat_input[stat]
 
     mob_choice = random.choice(list(mobs.items()))
-    "Name": name,
-    "HP": stats[0],
-    "Attack": stats[1],
-    "Defence": stats[2],
-    "Special": stats[3],
-    "Agility": stats[4],
-    "Intelligence": stats[5],
-    "Luck": stats[6]
+    print(mob_choice)
     mob_stats = {
-        "Name":         "Barry",
-        "HP":           stats[0],
-        "Attack":       stats[1],
-        "Defence":      stats[2],
-        "Special":      stats[3],
-        "Agility":      stats[4],
-        "Intelligence": stats[5],
-        "Luck":         stats[6]
+        "Name": name,
+        "HP": mobs[mob_choice][0],
+        "Attack": mobs[mob_choice][1],
+        "Defence": mobs[mob_choice][2],
+        "Special": mobs[mob_choice][3],
+        "Agility": mobs[mob_choice][4],
+        "Intelligence": mobs[mob_choice][5],
+        "Luck": mobs[mob_choice][6]
     }
     is_over = False
     while ~is_over:
@@ -127,18 +119,17 @@ def combat_loop(player_stat_input):  # pass monster info and player info?
 
 
 def perform_action(entity_acting, entity_passive, ch):
-
-    if ch == 1:                                                                     # Regular attack logic
+    if ch == 1:  # Regular attack logic
         print(entity_acting["Name"], " is attacking ", entity_passive["Name"], "!")
         damage = entity_acting["Attack"] // (entity_passive["Defence"] / 2)
         entity_passive["HP"] = entity_passive["HP"] - damage
 
-    elif ch == 2:                                                                   # Special attack logic
+    elif ch == 2:  # Special attack logic
         print(entity_acting["Name"], " is attacking with magic!")
         damage = entity_acting["Special"] // (entity_passive["Defence"] / 2)
         entity_passive["HP"] = entity_passive["HP"] - damage
 
-    elif ch == 3: # Run away logic
+    elif ch == 3:  # Run away logic
         print(entity_acting["Name"], " is trying to run away!")
         chance = randrange(0, 20)
         if chance <= 10 - entity_acting["Luck"] // 4:
@@ -151,8 +142,8 @@ def perform_action(entity_acting, entity_passive, ch):
     else:
         print("Unknown choice")
 
-    if entity_passive["HP"] <= 0:                        # If HP reaches 0, then they have been defeated
-        #print(entity_passive["Name"], " was defeated!")
+    if entity_passive["HP"] <= 0:  # If HP reaches 0, then they have been defeated
+        # print(entity_passive["Name"], " was defeated!")
         return True
     else:
         return False
@@ -173,11 +164,11 @@ def enemyortreasure(currPlayerStats):
 
 
 if __name__ == '__main__':
-    menu()
+    currPlayerStats= menu()
+    print(player_alive)
     while player_alive:
         direction = input("Would you like to move forwards or backwards? ")
         if direction == 'forwards':
-            currPlayerStats = selection()
             position += 1
             enemyortreasure(currPlayerStats)
         if direction == 'backwards':
